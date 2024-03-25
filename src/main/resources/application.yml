@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:mysql:your_mysql_host} # Replace "your_mysql_host" with your actual database url
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/database_name?serverTimezone=UTC} # Replace "database_name" with your actual database name
     username: ${JDBC_DATABASE_USERNAME:your_database_username} # Replace "your_database_username" with your actual database username
     password: ${JDBC_DATABASE_PASSWORD:your_database_password} # Replace "your_database_password" with your actual database password
   jpa:
@@ -22,8 +22,8 @@ spring:
       username: default
       password: your_redis_password # Replace "your_redis_password" with your actual Redis password
       port: 8080 # Replace "your_redis_port" with your actual Redis port
-      host: your_redis_host # Replace "your_redis_host" with your actual Redis hostname
-      database: 0
+      host: your_redis_host # Replace "your_redis_host" with your actual Redis hostname TEST IF YML ACTUALLY WORKS
+      database:
   cloud:
     azure:
       storage:
