@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/database_name?serverTimezone=UTC} # Replace "database_name" with your actual database name
+    url: ${JDBC_DATABASE_URL:jdbc:mysql:your_mysql_host} # Replace "your_mysql_host" with your actual database url
     username: ${JDBC_DATABASE_USERNAME:your_database_username} # Replace "your_database_username" with your actual database username
     password: ${JDBC_DATABASE_PASSWORD:your_database_password} # Replace "your_database_password" with your actual database password
   jpa:
