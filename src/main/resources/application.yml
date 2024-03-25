@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/database_name?serverTimezone=UTC} # Replace "database_name" with your actual database name
+    username: ${JDBC_DATABASE_USERNAME:your_database_username} # Replace "your_database_username" with your actual database username
+    password: ${JDBC_DATABASE_PASSWORD:your_database_password} # Replace "your_database_password" with your actual database password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        id:
+          new_generator_mappings: true
+        type:
+          preferred_uuid_jdbc_type: CHAR
+  data:
+    redis:
+      url: redis://default:your_redis_password@your_redis_host:your_redis_port # Replace with your Redis connection details
+      username: default
+      password: your_redis_password # Replace "your_redis_password" with your actual Redis password
+      port: 8080 # Replace "your_redis_port" with your actual Redis port
+      host: your_redis_host # Replace "your_redis_host" with your actual Redis hostname
+      database: 0
+  cloud:
+    azure:
+      storage:
+        blob:
+          account-name: your_azure_storage_account_name # Replace with your Azure storage account name
+          account-key: your_azure_storage_account_key # Replace with your Azure storage account key
+          container-name: your_azure_blob_container_name # Replace with your Azure blob container name
+          blob-name: your_azure_blob_name # Replace with your Azure blob name
+error:
+  handling:
+    http-status-in-json-response: true
+    exception-logging: NO_LOGGING
+    full-stacktrace-http-statuses: 5xx
+    log-levels:
+      5xx: ERROR
+    codes:
+      UserEmailUnique: USER_EMAIL_UNIQUE
+      CategoryNameUnique: CATEGORY_NAME_UNIQUE
+      OrderProductUnique: ORDER_PRODUCT_UNIQUE
+      CommentUserUnique: COMMENT_USER_UNIQUE
+      CommentProductUnique: COMMENT_PRODUCT_UNIQUE
+server:
+  port: ${PORT:your_server_port} # Replace "your_server_port" with your actual server port
+
+my:
+  azure:
+    connection-string: DefaultEndpointsProtocol=https;AccountName=your_azure_storage_account_name;AccountKey=your_azure_storage_account_key;EndpointSuffix=core.windows.net # Replace with your Azure storage account details
+    image-container-name: your_image_container_name # Replace with your image container name
