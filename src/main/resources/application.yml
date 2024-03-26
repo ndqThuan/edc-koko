@@ -50,5 +50,5 @@ server:
 
 my:
   azure:
-    connection-string: DefaultEndpointsProtocol=https;AccountName=your_azure_storage_account_name;AccountKey=your_azure_storage_account_key;EndpointSuffix=core.windows.net # Replace with your Azure storage account details
+    connection-string: # Replace with your Azure storage account connection string
     image-container-name: your_image_container_name # Replace with your image container name
