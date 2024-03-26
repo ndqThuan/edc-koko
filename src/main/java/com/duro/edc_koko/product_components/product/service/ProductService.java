@@ -1,41 +1,36 @@
 package com.duro.edc_koko.product_components.product.service;
 
-import com.duro.edc_koko.product_components.category.domain.Category;
-import com.duro.edc_koko.product_components.category.repos.CategoryRepository;
+import com.duro.edc_koko.order.domain.Order;
+import com.duro.edc_koko.order.repos.OrderRepository;
 import com.duro.edc_koko.product_components.comment.domain.Comment;
 import com.duro.edc_koko.product_components.comment.repos.CommentRepository;
 import com.duro.edc_koko.product_components.image.domain.Image;
 import com.duro.edc_koko.product_components.image.repos.ImageRepository;
-import com.duro.edc_koko.order.domain.Order;
-import com.duro.edc_koko.order.repos.OrderRepository;
 import com.duro.edc_koko.product_components.product.domain.Product;
 import com.duro.edc_koko.product_components.product.model.ProductDTO;
 import com.duro.edc_koko.product_components.product.repos.ProductRepository;
 import com.duro.edc_koko.util.NotFoundException;
 import com.duro.edc_koko.util.ReferencedWarning;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
     private final OrderRepository orderRepository;
     private final ImageRepository imageRepository;
     private final CommentRepository commentRepository;
 
-    public ProductService(final ProductRepository productRepository,
-            final CategoryRepository categoryRepository, final OrderRepository orderRepository,
-            final ImageRepository imageRepository, final CommentRepository commentRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-        this.orderRepository = orderRepository;
-        this.imageRepository = imageRepository;
-        this.commentRepository = commentRepository;
-    }
+    @Value("${my.product-image-not-found}")
+    private String PRODUCT_IMAGE_NOT_FOUND_URL;
+
 
     public List<ProductDTO> findAll() {
         final List<Product> products = productRepository.findAll(Sort.by("id"));
@@ -43,6 +38,12 @@ public class ProductService {
                 .map(product -> mapToDTO(product, new ProductDTO()))
                 .toList();
     }
+
+    /*public List<Product> findAll() {
+        final List<Product> products = productRepository.findAll(Sort.by("id"));
+        return products.stream()
+                .toList();
+    }*/
 
     public List<ProductDTO> findTop7ProductsInSale() {
         final List<Product> products = productRepository.findTop7ProductsInSale()
@@ -83,7 +84,11 @@ public class ProductService {
         productDTO.setPrice(product.getPrice());
         productDTO.setAvailable(product.getAvailable());
         productDTO.setCategory(product.getCategory() == null ? null : product.getCategory().getName());
-        productDTO.setImageUrl(product.getImageUrl());
+
+        productDTO.setImageUrl(imageRepository.findFirstByProduct(product) == null
+                ? PRODUCT_IMAGE_NOT_FOUND_URL
+                : imageRepository.findFirstByProduct(product).getUrl());
+
         return productDTO;
     }
 

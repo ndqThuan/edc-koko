@@ -1,9 +1,9 @@
 package com.duro.edc_koko.user.service;
 
 
-import com.duro.edc_koko.auth.model.AuthenticationRequest;
-import com.duro.edc_koko.auth.model.RegisterRequest;
 import com.duro.edc_koko.user.domain.User;
+import com.duro.edc_koko.user.model.AuthenticationRequest;
+import com.duro.edc_koko.user.model.RegisterRequest;
 import com.duro.edc_koko.user.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

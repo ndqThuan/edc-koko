@@ -23,8 +23,13 @@ import static org.springframework.http.HttpMethod.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**",
-            "/api/v1/blob/**"};
+    private static final String[] WHITE_LIST_URL = {
+            "/webjars/**", "css/**", "/js/**", "/images/**",
+            "/api/v1/auth/**",
+            "/api/v1/blob/**",
+            "/api/products",
+            "/api/categories",
+            "/api/categories/**", "/"};
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
