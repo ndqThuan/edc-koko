@@ -12,9 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.duro.edc_koko.user.model.Permission.*;
-import static com.duro.edc_koko.user.model.Role.ADMIN;
-import static com.duro.edc_koko.user.model.Role.MANAGER;
+import static com.duro.edc_koko.entity.user.model.Permission.*;
+import static com.duro.edc_koko.entity.user.model.Role.ADMIN;
+import static com.duro.edc_koko.entity.user.model.Role.MANAGER;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -24,12 +24,15 @@ import static org.springframework.http.HttpMethod.*;
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
-            "/webjars/**", "css/**", "/js/**", "/images/**",
+            "/webjars/**", "css/**", "/js/**", "/images/**", "login",
             "/api/v1/auth/**",
             "/api/v1/blob/**",
+            "/api/jedis",
+            "/api/users/**",
             "/api/products",
+            "/api/products/**",
             "/api/categories",
-            "/api/categories/**", "/"};
+            "/api/categories/**", "/userInfo"};
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
@@ -46,8 +49,7 @@ public class SecurityConfiguration {
                         .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
 
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
                 .logout(logout ->
