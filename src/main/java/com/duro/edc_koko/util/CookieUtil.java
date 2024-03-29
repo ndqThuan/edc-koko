@@ -1,6 +1,7 @@
 package com.duro.edc_koko.util;
 
 
+import com.duro.edc_koko.auth.model.e_num.TokenType;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,10 +13,12 @@ import java.util.Arrays;
 @Component
 public class CookieUtil {
 
-    public String getTokenFromCookie(HttpServletRequest request) {
+    public String getTokenFromCookie(HttpServletRequest request, TokenType tokenType) {
+        String cookieName = tokenType.getLabel();
+
         if (request.getCookies() != null) {
             return Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equalsIgnoreCase("SESSION_EDC"))
+                    .filter(cookie -> cookie.getName().equalsIgnoreCase(cookieName))
                     .map(Cookie::getValue)
                     .findFirst()
                     .orElseThrow();
@@ -23,8 +26,10 @@ public class CookieUtil {
         return null;
     }
 
-    public void setTokenToCookie(HttpServletResponse response, String token) {
-        ResponseCookie responseCookie = ResponseCookie.from("SESSION_EDC", token)
+    public void setTokenToCookie(HttpServletResponse response, TokenType tokenType, String token) {
+        String cookieName = tokenType.getLabel();
+
+        ResponseCookie responseCookie = ResponseCookie.from(cookieName, token)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

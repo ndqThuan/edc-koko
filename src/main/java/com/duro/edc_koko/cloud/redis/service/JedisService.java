@@ -13,11 +13,4 @@ public class JedisService {
         jedis.set(key, value);
     }
 
-    public String getCachedToken(String userEmail) {
-        return jedis.get("token:" + userEmail);
-    }
-
-    public void cacheToken(String userEmail, String token) {
-        jedis.setex("token:" + userEmail, 60 * 60, token);
-    }
 }
