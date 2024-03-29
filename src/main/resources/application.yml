@@ -30,7 +30,6 @@ spring:
           account-name: your_azure_storage_account_name # Replace with your Azure storage account name
           account-key: your_azure_storage_account_key # Replace with your Azure storage account key
           container-name: your_azure_blob_container_name # Replace with your Azure blob container name
-          blob-name: your_azure_blob_name # Replace with your Azure blob name
 error:
   handling:
     http-status-in-json-response: true
@@ -53,3 +52,10 @@ my:
     image-container-name: your_image_container_name # Replace with your image container name
   product-image-not-found: # Replace with your chosen "image not found" url, you can find a random image on the internet
 
+application:
+  security:
+    jwt:
+      secret-key: # Replace with your secrect key, you can make it on online service that provides token key generation
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
