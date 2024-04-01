@@ -1,6 +1,6 @@
 package com.duro.edc_koko.auth.model;
 
-import com.duro.edc_koko.models.user.domain.User;
+import com.duro.edc_koko.entity.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

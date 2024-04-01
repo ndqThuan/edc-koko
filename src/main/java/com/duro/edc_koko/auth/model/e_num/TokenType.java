@@ -4,13 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum TokenType {
-    ACCESS_TOKEN("access_token"),
-    REFRESH_TOKEN("refresh_token");
 
-    private final String label;
+    ACCESS_TOKEN,
 
-    TokenType(String label) {
-        this.label = label;
-    }
+    REFRESH_TOKEN
 
 }

@@ -1,5 +1,6 @@
 package com.duro.edc_koko.auth.service;
 
+import com.duro.edc_koko.auth.model.e_num.TokenType;
 import com.duro.edc_koko.auth.repos.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
     private final TokenRepository tokenRepository;
+    private final JwtService jwtService;
 
     @Override
     public void logout(
@@ -22,17 +24,18 @@ public class LogoutService implements LogoutHandler {
             Authentication authentication
     ) {
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
-        }
-        jwt = authHeader.substring(7);
+        final String jwt = jwtService.getTokenFromCookie(request, TokenType.ACCESS_TOKEN);
+
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
         if (storedToken != null) {
             storedToken.setExpired(true);
             storedToken.setRevoked(true);
             tokenRepository.save(storedToken);
+
+            jwtService.removeTokenFromCookie(response, TokenType.ACCESS_TOKEN);
+            jwtService.removeTokenFromCookie(response, TokenType.REFRESH_TOKEN);
+
             SecurityContextHolder.clearContext();
         }
     }

@@ -1,6 +1,6 @@
 package com.duro.edc_koko.auth.config;
 
-import com.duro.edc_koko.models.user.domain.User;
+import com.duro.edc_koko.entity.user.domain.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

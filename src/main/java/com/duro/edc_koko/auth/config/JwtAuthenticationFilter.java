@@ -1,7 +1,9 @@
 package com.duro.edc_koko.auth.config;
 
+import com.duro.edc_koko.auth.model.e_num.TokenType;
 import com.duro.edc_koko.auth.repos.TokenRepository;
-import com.duro.edc_koko.auth.service.AuthenticationService;
+import com.duro.edc_koko.auth.service.JwtService;
+import com.duro.edc_koko.util.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +24,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthenticationService.JwtService jwtService;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
+    private final CookieUtil cookieUtil;
 
     @Override
     protected void doFilterInternal(
@@ -37,19 +40,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
+        String jwt = jwtService.getTokenFromCookie(request, TokenType.ACCESS_TOKEN);
         final String userEmail;
 
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (jwt == null || jwt.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
 
+        userEmail = jwtService.extractUsername(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
