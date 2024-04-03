@@ -1,19 +1,17 @@
 # EdcKoko
 
-This is an E-Commerce project using Spring Boot for my final assignment.
-Feel free to contact us for further questions.
+This is an E-Commerce project using Spring Boot for my final assignment. It's still in developing state and is being updated with new technology.
+Feel free to contact me for further questions.
 
 ## Development
 
-Update your local database connection in `application.yml` or create your own `application-local.yml` file to override
+Update your local database connection and your prefer port in `application.yml` or create your own `application-local.yml` file to override
 settings for development.
 
 During development it is recommended to use the profile `local`. In IntelliJ `-Dspring.profiles.active=local` can be
 added in the VM options of the Run Configuration after enabling this property in "Modify options".
 
 Lombok must be supported by your IDE. For IntelliJ install the Lombok plugin and enable annotation processing.
-
-After starting the application it is accessible under `localhost:1911`.
 
 ## Build
 
@@ -29,12 +27,6 @@ Start your application with the following command - here with the profile `produ
 java -Dspring.profiles.active=production -jar ./target/edc-koko-0.0.1-SNAPSHOT.jar
 ```
 
-If required, a Docker image can be created with the Spring Boot plugin. Add `SPRING_PROFILES_ACTIVE=production` as
-environment variable when running the container.
-
-```
-mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=com.duro/edc-koko
-```
 
 ## Further readings
 
