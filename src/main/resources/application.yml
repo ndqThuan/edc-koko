@@ -23,39 +23,26 @@ spring:
       port: 8080 # Replace "your_redis_port" with your actual Redis port
       host: your_redis_host # Replace "your_redis_host" with your actual Redis hostname
       database: 0 # Replace with your actual Redis database index
+      url: your_redis_endpoint # Replace with your actual Redis endpoint
   cloud:
     azure:
       storage:
         blob:
           account-name: your_azure_storage_account_name # Replace with your Azure storage account name
           account-key: your_azure_storage_account_key # Replace with your Azure storage account key
-          container-name: your_azure_blob_container_name # Replace with your Azure blob container name
-error:
-  handling:
-    http-status-in-json-response: true
-    exception-logging: NO_LOGGING
-    full-stacktrace-http-statuses: 5xx
-    log-levels:
-      5xx: ERROR
-    codes:
-      UserEmailUnique: USER_EMAIL_UNIQUE
-      CategoryNameUnique: CATEGORY_NAME_UNIQUE
-      OrderProductUnique: ORDER_PRODUCT_UNIQUE
-      CommentUserUnique: COMMENT_USER_UNIQUE
-      CommentProductUnique: COMMENT_PRODUCT_UNIQUE
+          container-name: your_azure_blob_container_name # Replace with your Azure blob container name that you store images
 server:
   port: ${PORT:your_server_port} # Replace "your_server_port" with your actual server port
 
-my:
-  azure:
-    connection-string: # Replace with your Azure storage account connection string
-    image-container-name: your_image_container_name # Replace with your image container name
+azure:
+  connection-string: # Replace with your Azure storage account connection string
+  image-container-name: your_image_container_name # Replace with your image container name
   product-image-not-found: # Replace with your chosen "image not found" url, you can find a random image on the internet
 
 application:
   security:
     jwt:
-      secret-key: # Replace with your secrect key, you can make it on online service that provides token key generation
+      secret-key: # Replace with your secrect key, you can make it with online service that provides secrey key generation
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
