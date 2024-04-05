@@ -9,6 +9,8 @@ import com.duro.edc_koko.entity.product.repos.ProductRepository;
 import com.duro.edc_koko.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Sort;
@@ -27,7 +29,7 @@ public class ProductService {
     private final OrderDetailRepository orderDetailRepository;
     private final ImageRepository imageRepository;
 
-    @Value("${product-image-not-found}")
+    @Value("${azure.image-not-found-url}")
     // Create a custom property that take the value of the image not found url
     // Or you can just put a string in this variable
     private String IMAGE_NOT_FOUND_URL;
@@ -68,10 +70,12 @@ public class ProductService {
         return productRepository.save(product).getId();
     }
 
-    public void update(final Product product) {
+    @CachePut(value = "product", key = "#id")
+    public void update(final Integer id, final Product product) {
         productRepository.save(product);
     }
 
+    @CacheEvict(value = "product", key = "#id")
     public void delete(final Integer id) {
         productRepository.deleteById(id);
     }
@@ -93,7 +97,7 @@ public class ProductService {
     }
 
     private ProductTrend getTrend(final Product product) {
-        if (product.getUploadDate().isAfter(LocalDate.now().minusMonths(1))) {
+        if (product.getUploadDate().isAfter(LocalDate.now().minusWeeks(1))) {
             return ProductTrend.NEW;
         }
 
@@ -102,10 +106,6 @@ public class ProductService {
         }
 
         return null;
-    }
-
-    public void initTable() {
-
     }
 
 }

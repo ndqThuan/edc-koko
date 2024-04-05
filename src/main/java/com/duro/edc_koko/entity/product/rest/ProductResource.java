@@ -25,10 +25,8 @@ public class ProductResource {
         return ResponseEntity.ok(productService.findAll());
     }
 
-    @CrossOrigin
     @GetMapping("/{id}")
     public ProductDTO getProduct(@PathVariable(name = "id") final Integer id) {
-        System.out.println(productService.get(id));
         return productService.get(id);
     }
 
@@ -40,14 +38,8 @@ public class ProductResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<Integer> updateProduct(@RequestBody @Valid final Product product) {
-        productService.update(product);
-        return ResponseEntity.ok(product.getId());
+        Integer id = product.getId();
+        productService.update(id, product);
+        return ResponseEntity.ok(id);
     }
-
-    @PostMapping("/init-table")
-    public ResponseEntity<Void> initTable() {
-        productService.initTable();
-        return ResponseEntity.ok().build();
-    }
-
 }

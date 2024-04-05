@@ -18,55 +18,54 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final ProductRepository productRepository;
 
-    public ImageService(final ImageRepository imageRepository,
-                        final ProductRepository productRepository) {
+    public ImageService (final ImageRepository imageRepository,
+                         final ProductRepository productRepository) {
         this.imageRepository = imageRepository;
         this.productRepository = productRepository;
     }
 
-    public List<ImageDTO> findAll() {
+    public List<ImageDTO> findAll () {
         final List<Image> images = imageRepository.findAll(Sort.by("id"));
         return images.stream()
-                .map(image -> mapToDTO(image, new ImageDTO()))
-                .toList();
+                     .map(image -> mapToDTO(image, new ImageDTO()))
+                     .toList();
     }
 
-    public ImageDTO get(final Integer id) {
+    public ImageDTO get (final Integer id) {
         return imageRepository.findById(id)
-                .map(image -> mapToDTO(image, new ImageDTO()))
-                .orElseThrow(NotFoundException::new);
+                              .map(image -> mapToDTO(image, new ImageDTO()))
+                              .orElseThrow(NotFoundException::new);
     }
 
-    public Integer create(final ImageDTO imageDTO) {
+    public Integer create (final ImageDTO imageDTO) {
         final Image image = new Image();
         mapToEntity(imageDTO, image);
         return imageRepository.save(image).getId();
     }
 
-    public void update(final Integer id, final ImageDTO imageDTO) {
+    public void update (final Integer id, final ImageDTO imageDTO) {
         final Image image = imageRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                                           .orElseThrow(NotFoundException::new);
         mapToEntity(imageDTO, image);
         imageRepository.save(image);
     }
 
-    public void delete(final Integer id) {
+    public void delete (final Integer id) {
         imageRepository.deleteById(id);
     }
 
-    private ImageDTO mapToDTO(final Image image, final ImageDTO imageDTO) {
-        imageDTO.setId(image.getId());
+    private ImageDTO mapToDTO (final Image image, final ImageDTO imageDTO) {
         imageDTO.setUrl(image.getUrl());
         imageDTO.setProduct(image.getProduct() == null ? null : image.getProduct().getId());
         return imageDTO;
     }
 
-    private Image mapToEntity(final ImageDTO imageDTO, final Image image) {
+    private void mapToEntity (final ImageDTO imageDTO, final Image image) {
         image.setUrl(imageDTO.getUrl());
-        final Product product = imageDTO.getProduct() == null ? null : productRepository.findById(imageDTO.getProduct())
-                .orElseThrow(() -> new NotFoundException("product not found"));
+        final Product product = imageDTO.getProduct() == null ? null
+                : productRepository.findById(imageDTO.getProduct())
+                                   .orElseThrow(() -> new NotFoundException("product not found"));
         image.setProduct(product);
-        return image;
     }
 
 }
