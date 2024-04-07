@@ -10,6 +10,8 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -36,6 +38,9 @@ public class ProductDTO implements Serializable {
     @NotNull
     private String category;
 
-    private String imageUrl;
+    private List<String> imageUrl = new ArrayList<>();
 
+    public void addImageUrl (String url) {
+        this.imageUrl.add(url);
+    }
 }

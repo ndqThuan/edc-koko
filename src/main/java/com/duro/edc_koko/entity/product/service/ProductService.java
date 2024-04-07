@@ -1,6 +1,6 @@
 package com.duro.edc_koko.entity.product.service;
 
-import com.duro.edc_koko.entity.image.repos.ImageRepository;
+import com.duro.edc_koko.entity.image.service.ImageService;
 import com.duro.edc_koko.entity.order.repos.OrderDetailRepository;
 import com.duro.edc_koko.entity.product.domain.Product;
 import com.duro.edc_koko.entity.product.model.ProductDTO;
@@ -17,7 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -27,7 +30,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final OrderDetailRepository orderDetailRepository;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
     @Value("${azure.image-not-found-url}")
     // Create a custom property that take the value of the image not found url
@@ -35,68 +38,81 @@ public class ProductService {
     private String IMAGE_NOT_FOUND_URL;
 
 
-    public List<ProductDTO> findAll() {
+    public List<ProductDTO> findAll () {
         final List<Product> products = productRepository.findAll(Sort.by("id"));
         return products.stream()
-                .map(product -> mapToDTO(product, new ProductDTO()))
-                .toList();
+                       .map(product -> mapToDTO(product, new ProductDTO()))
+                       .toList();
     }
 
-//    public List<ProductDTO> findTop7ProductsInSale() {
-//        final List<Product> products = productRepository.findTop7ProductsInSale()
-//                .orElseThrow(NotFoundException::new);
-//        return products.stream()
-//                .map(product -> mapToDTO(product, new ProductDTO()))
-//                .toList();
-//    }
 
-    public List<ProductDTO> find7NewProducts() {
+    public List<ProductDTO> find7NewProducts () {
         final List<Product> products = productRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).subList(0, 7);
         return products.stream()
-                .map(product -> mapToDTO(product, new ProductDTO()))
-                .toList();
+                       .map(product -> mapToDTO(product, new ProductDTO()))
+                       .toList();
     }
 
 
     @Cacheable(value = "product", key = "#id")
-    public ProductDTO get(final Integer id) {
-        return productRepository.findById(id)
-                .map(product -> mapToDTO(product, new ProductDTO()))
-                .orElseThrow(NotFoundException::new);
+    public ProductDTO get (final Integer id) {
+        Optional<Product> thisProduct = productRepository.findById(id);
+        ProductDTO viewProduct = new ProductDTO();
+
+        if (thisProduct.isPresent()) {
+            mapToDTO(thisProduct.get(), viewProduct);
+            viewProduct.setImageUrl(imageService.findAllByProduct(thisProduct.get()));
+        }
+
+        return viewProduct;
     }
 
-    public Integer create(final Product product) {
+    @Cacheable(value = "product", key = "#id")
+    public Map<String, Object> getProductMapForView (final Integer id) {
+        Map<String, Object> viewMap = new HashMap<>();
+
+        Product thisProduct = productRepository.findById(id).orElseThrow(NotFoundException::new);
+        viewMap.put("thisProduct", thisProduct);
+
+        List<String> imageUrls = imageService.findAllByProduct(thisProduct);
+        viewMap.put("imageUrls", imageUrls);
+
+        return viewMap;
+    }
+
+
+    public Integer create (final Product product) {
         product.setUploadDate(LocalDate.now());
         return productRepository.save(product).getId();
     }
 
     @CachePut(value = "product", key = "#id")
-    public void update(final Integer id, final Product product) {
+    public void update (final Integer id, final Product product) {
         productRepository.save(product);
     }
 
     @CacheEvict(value = "product", key = "#id")
-    public void delete(final Integer id) {
+    public void delete (final Integer id) {
         productRepository.deleteById(id);
     }
 
-    private ProductDTO mapToDTO(final Product product, final ProductDTO productDTO) {
+    private ProductDTO mapToDTO (final Product product, final ProductDTO productDTO) {
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setPrice(product.getPrice());
         productDTO.setAvailable(product.getAvailable());
         productDTO.setCategory(product.getCategory() == null ? null : product.getCategory().getName());
 
-        productDTO.setImageUrl(imageRepository.findFirstByProduct(product) == null
-                ? IMAGE_NOT_FOUND_URL
-                : imageRepository.findFirstByProduct(product).getUrl());
+        productDTO.addImageUrl(imageService.findFirstByProduct(product) == null
+                                       ? IMAGE_NOT_FOUND_URL
+                                       : imageService.findFirstByProduct(product));
 
         productDTO.setTrend(getTrend(product));
 
         return productDTO;
     }
 
-    private ProductTrend getTrend(final Product product) {
+    private ProductTrend getTrend (final Product product) {
         if (product.getUploadDate().isAfter(LocalDate.now().minusWeeks(1))) {
             return ProductTrend.NEW;
         }

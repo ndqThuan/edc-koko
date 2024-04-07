@@ -9,8 +9,9 @@ import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
 
-    Image findFirstByProduct(Product product);
+    Image findFirstByProduct (Product product);
 
-    List<Image> findByProduct(Product product);
+    List<Image> findByProduct (Product product);
+
 
 }

@@ -87,9 +87,9 @@
 
                                     <!-- product -->
                                     <div class="product" th:each="product : ${productList}">
-                                        <a th:href="@{${product.id}}">
+                                        <a th:href="@{products/productId={id}(id = ${product.id})}">
                                             <div class="product-img">
-                                                <img alt="" th:src="@{${product.imageUrl}}">
+                                                <img alt="" th:src="@{${product.imageUrl.get(0)}}">
                                                 <div class="product-label" th:if="${product.trend != null}">
                                                     <span class="new">[[${product.trend}]]</span>
                                                 </div>
@@ -148,9 +148,9 @@
                                 <div class="products-slick" data-nav="#slick-nav-2" th:object="${productList}">
                                     <!-- product -->
                                     <div class="product" th:each="product : ${productList}">
-                                        <a th:href="@{${product.id}}">
+                                        <a th:href="@{products/productId={id}(id = ${product.id})}">
                                             <div class="product-img">
-                                                <img alt="" th:src="@{${product.imageUrl}}">
+                                                <img alt="" th:src="@{${product.imageUrl.get(0)}}">
                                                 <div class="product-label" th:if="${product.trend != null}">
                                                     <span class="new">[[${product.trend}]]</span>
                                                 </div>

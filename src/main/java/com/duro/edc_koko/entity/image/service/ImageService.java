@@ -31,6 +31,18 @@ public class ImageService {
                      .toList();
     }
 
+    public List<String> findAllByProduct (Product product) {
+        final List<Image> images = imageRepository.findByProduct(product);
+        return images.stream()
+                     .map(Image::getUrl)
+                     .toList();
+    }
+
+    public String findFirstByProduct (Product product) {
+        final Image images = imageRepository.findFirstByProduct(product);
+        return images.getUrl();
+    }
+
     public ImageDTO get (final Integer id) {
         return imageRepository.findById(id)
                               .map(image -> mapToDTO(image, new ImageDTO()))
