@@ -30,6 +30,7 @@ public class SecurityConfiguration {
             "/", "/products/**",
             "/api/v1/auth/**",
             "api/v1/blob/**",
+            "api/products/**",
             "/index",
             "/webjars/**",
             "/css/**",

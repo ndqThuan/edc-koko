@@ -33,6 +33,8 @@ public class ProductDTO implements Serializable {
     @NotNull
     private Boolean available;
 
+    private String description;
+
     private ProductTrend trend;
 
     @NotNull

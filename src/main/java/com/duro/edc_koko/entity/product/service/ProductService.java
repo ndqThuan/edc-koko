@@ -6,7 +6,6 @@ import com.duro.edc_koko.entity.product.domain.Product;
 import com.duro.edc_koko.entity.product.model.ProductDTO;
 import com.duro.edc_koko.entity.product.model.ProductTrend;
 import com.duro.edc_koko.entity.product.repos.ProductRepository;
-import com.duro.edc_koko.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
@@ -17,9 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -61,25 +58,19 @@ public class ProductService {
 
         if (thisProduct.isPresent()) {
             mapToDTO(thisProduct.get(), viewProduct);
+            viewProduct.setDescription(thisProduct.get().getDescription());
             viewProduct.setImageUrl(imageService.findAllByProduct(thisProduct.get()));
         }
 
         return viewProduct;
     }
 
-    @Cacheable(value = "product", key = "#id")
-    public Map<String, Object> getProductMapForView (final Integer id) {
-        Map<String, Object> viewMap = new HashMap<>();
-
-        Product thisProduct = productRepository.findById(id).orElseThrow(NotFoundException::new);
-        viewMap.put("thisProduct", thisProduct);
-
-        List<String> imageUrls = imageService.findAllByProduct(thisProduct);
-        viewMap.put("imageUrls", imageUrls);
-
-        return viewMap;
+    public List<ProductDTO> getProductsFromCategory (String category) {
+        List<Product> products = productRepository.findDistinctByCategory_Name(category);
+        return products.stream()
+                       .map(product -> mapToDTO(product, new ProductDTO()))
+                       .toList();
     }
-
 
     public Integer create (final Product product) {
         product.setUploadDate(LocalDate.now());
