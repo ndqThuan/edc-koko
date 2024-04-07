@@ -60,6 +60,8 @@ public class ProductService {
             mapToDTO(thisProduct.get(), viewProduct);
             viewProduct.setDescription(thisProduct.get().getDescription());
             viewProduct.setImageUrl(imageService.findAllByProduct(thisProduct.get()));
+        } else {
+            throw new NullPointerException();
         }
 
         return viewProduct;

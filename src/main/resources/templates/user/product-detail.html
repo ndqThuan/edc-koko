@@ -191,7 +191,7 @@
 
                                     <!-- product -->
                                     <div class="product" th:each="product : ${productList}">
-                                        <a th:href="@{products/{id}(id = ${product.id})}">
+                                        <a th:href="@{~/products/{id}(id = ${product.id})}">
                                             <div class="product-img">
                                                 <img alt="" th:src="@{${product.imageUrl.get(0)}}">
                                                 <div class="product-label" th:if="${product.trend != null}">
@@ -201,7 +201,9 @@
                                         </a>
                                         <div class="product-body">
                                             <p class="product-category">[[${product.category}]]</p>
-                                            <h3 class="product-name"><a href="#">[[${product.name}]]</a></h3>
+                                            <h3 class="product-name">
+                                                <a th:href="@{~/products/{id}(id = ${product.id})}">[[${product.name}]]</a>
+                                            </h3>
                                             <h4 class="product-price">$[[${product.price}]] </h4>
                                         </div>
                                         <div class="add-to-cart">
