@@ -25,19 +25,21 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfiguration {
-
     private static final String[] WHITE_LIST_URL = {
-            "/", "/products/**",
-            "/api/v1/auth/**",
-            "api/v1/blob/**",
-            "api/products/**",
-            "/index",
+            "/",
+            "/products/**",
+            "/categories/**",
+            "/layout/**",
             "/webjars/**",
             "/css/**",
             "/js/**",
             "/img/**",
             "/fonts/**",
-            "/swagger-ui.html"};
+
+            "/api/v1/auth/**",
+            "api/v1/blob/**",
+            "api/products/**"};
+
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;

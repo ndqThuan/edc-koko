@@ -4,7 +4,6 @@
 
 <head>
     <title>STORE</title>
-    <link href="/favicon.ico" rel="icon" type="image/x-icon">
 </head>
 
 <body>
@@ -26,6 +25,15 @@
                             <div class="input-checkbox">
                                 <input id="category-1" type="checkbox">
                                 <label for="category-1">
+                                    <span></span>
+                                    Laptops
+                                    <small>(120)</small>
+                                </label>
+                            </div>
+
+                            <div class="input-checkbox">
+                                <input id="category-2" type="checkbox">
+                                <label for="category-2">
                                     <span></span>
                                     Laptops
                                     <small>(120)</small>
@@ -67,8 +75,8 @@
                             <label>
                                 Sort By:
                                 <select class="input-select">
-                                    <option value="0">Name</option>
-                                    <option value="1">Price</option>
+                                    <option value="name">Name</option>
+                                    <option value="price">Price</option>
                                 </select>
                             </label>
                         </div>
@@ -78,27 +86,35 @@
                     <!-- store products -->
                     <div id="product-row">
                         <!-- product -->
-                        <div class="row" th:fragment="productRowFragment" th:with="utility=${session.utility}">
+                        <div class="row" th:fragment="productRowFragment">
+
                             <div class="col-md-4 col-xs-6" th:each="product : ${productList}">
+
                                 <div class="product">
-                                    <div class="product-img">
-                                        <img alt="" src="./img/product06.png">
-                                        <div class="product-label">
-                                            <span class="new">HOT</span>
+                                    <a th:href="@{~/products/{id}(id = ${product.id})}">
+                                        <div class="product-img">
+                                            <img alt="" th:src="@{${product.imageUrl.get(0)}}">
+                                            <div class="product-label" th:if="${product.trend != null}">
+                                                <span class="new">[[${product.trend}]]</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                     <div class="product-body">
-                                        <p class="product-category">Category</p>
-                                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                        <h4 class="product-price">$980.00 </h4>
+                                        <p class="product-category">[[${product.category}]]</p>
+                                        <h3 class="product-name"><a href="#">[[${product.name}]]</a></h3>
+                                        <h4 class="product-price">$[[${product.price}]] </h4>
                                     </div>
                                     <div class="add-to-cart">
-                                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
-                                                                                                            cart
+                                        <button class="add-to-cart-btn">
+                                            <i class="fa fa-shopping-cart"></i>
+                                            add to cart
                                         </button>
                                     </div>
                                 </div>
+
+
                             </div>
+
                         </div>
                         <!-- /product -->
                     </div>
@@ -108,13 +124,6 @@
                     <!-- store bottom filter -->
                     <div class="store-filter clearfix">
                         <span class="store-qty">Showing 20-100 products</span>
-                        <ul class="store-pagination">
-                            <li class="active">1</li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                        </ul>
                     </div>
                     <!-- /store bottom filter -->
                 </div>

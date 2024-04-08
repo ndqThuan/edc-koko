@@ -68,11 +68,12 @@ public class ProductService {
     }
 
     public List<ProductDTO> getProductsFromCategory (String category) {
-        List<Product> products = productRepository.findDistinctByCategory_Name(category);
+        List<Product> products = productRepository.findByCategory_Name(category);
         return products.stream()
                        .map(product -> mapToDTO(product, new ProductDTO()))
                        .toList();
     }
+
 
     public Integer create (final Product product) {
         product.setUploadDate(LocalDate.now());
@@ -94,7 +95,9 @@ public class ProductService {
         productDTO.setName(product.getName());
         productDTO.setPrice(product.getPrice());
         productDTO.setAvailable(product.getAvailable());
-        productDTO.setCategory(product.getCategory() == null ? null : product.getCategory().getName());
+        productDTO.setCategory(product.getCategory() == null
+                                       ? null
+                                       : product.getCategory().getName());
 
         productDTO.addImageUrl(imageService.findFirstByProduct(product) == null
                                        ? IMAGE_NOT_FOUND_URL

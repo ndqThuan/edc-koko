@@ -6,6 +6,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <link href="../img/web_icon.ico" rel="icon" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
     <!-- Google font -->
@@ -56,7 +57,7 @@
                 <!-- LOGO -->
                 <div class="col-md-3">
                     <div class="header-logo">
-                        <a class="logo" href="#">
+                        <a class="logo" href="../">
                             <img alt="" class="fit" src="https://edckoko.blob.core.windows.net/images/edc-koko-logo.png">
                         </a>
                     </div>
@@ -66,14 +67,20 @@
                 <!-- SEARCH BAR -->
                 <div class="col-md-6">
                     <div class="header-search">
-                        <form>
-                            <select class="input-select">
+                        <form class="d-flex">
+                            <select class="p-2 flex-grow-1 input-select rounded-start-5">
                                 <option value="0">All Categories</option>
-                                <option value="1">Category 01</option>
-                                <option value="1">Category 02</option>
+                                <option value="Keychain">Keychain</option>
+                                <option value="Multitool">Multitool</option>
+                                <option value="Spoon And Fork">Spoon And Fork</option>
+                                <option value="Pen And Knuckle">Pen And Knuckle</option>
+                                <option value="Flashlight and Prybar">Flashlight and Prybar</option>
+                                <option value="Camping Tools">Camping Tools</option>
+
                             </select>
-                            <input class="input" placeholder="Search here">
-                            <button class="search-btn">Search</button>
+
+                            <input class="input rounded-0 p-2" placeholder="Search here">
+                            <button class="btn-danger rounded-end-5 bg-danger text-light fw-bold p-2 border-2 border-white">Search</button>
                         </form>
                     </div>
                 </div>
@@ -125,6 +132,7 @@
                             </div>
                         </div>
                         <!-- /Cart -->
+
                     </div>
                 </div>
                 <!-- /ACCOUNT -->
@@ -147,10 +155,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link pe-5 fw-semibold fs-4" href="#">Hot Deals</a>
-                <a class="nav-link pe-5 fw-semibold fs-4" href="#">Categories</a>
-                <a class="nav-link pe-5 fw-semibold fs-4" href="#">Laptops</a>
-                <a class="nav-link pe-5 fw-semibold fs-4" href="#">Smartphones</a>
+                <a class="nav-link pe-5 fw-semibold fs-4" href="../categories">Categories</a>
+                <a class="nav-link pe-5 fw-semibold fs-4" href="../categories">Keychain</a>
+                <a class="nav-link pe-5 fw-semibold fs-4" href="../categories">Multitool</a>
+                <a class="nav-link pe-5 fw-semibold fs-4" href="../categories">Knife</a>
+                <a class="nav-link pe-5 fw-semibold fs-4" href="../categories">Camping Tools</a>
             </div>
         </div>
     </div>
@@ -255,7 +264,6 @@
     <!-- /bottom footer -->
 </footer>
 <!-- /FOOTER -->
-
 
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>

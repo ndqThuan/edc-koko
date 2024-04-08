@@ -12,7 +12,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Product findFirstByCategory (Category category);
 
-    @Query("select distinct p from Product p where p.category.name = ?1")
-    List<Product> findDistinctByCategory_Name (String name);
+    @Query("select p from Product p where upper(p.category.name) = upper(?1)")
+    List<Product> findByCategory_Name (String name);
+
 
 }
