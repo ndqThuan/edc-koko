@@ -2,7 +2,7 @@
 <html layout:decorate="~{user/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-    <title>STORE</title>
+    <title>Categories</title>
 </head>
 
 <body>
@@ -29,9 +29,11 @@
                             <div class="input-checkbox"
                                  th:each="entry : ${categoryList}">
                                 <input name="categories"
+                                       th:checked="${productFilters != null && productFilters.getCategories().contains(entry.key.replace(' ', '-').toLowerCase())}"
                                        th:id="'category-' + ${entry.key}"
                                        th:value="${entry.key.replace(' ', '-').toLowerCase()}"
-                                       type="checkbox">
+                                       type="checkbox"
+                                >
                                 <label th:for="'category-' + ${entry.key}">
                                     <span></span>
                                     [[${entry.key}]]
@@ -77,11 +79,11 @@
                                 Order By:
                                 <select class="input-select" name="orderBy">
                                     <option disabled selected value="">Please select</option>
-                                    <option value="name-asc">Name: Ascending</option>
-                                    <option value="name-desc">Name: Descending</option>
+                                    <option class="fw-bold" value="name-asc">Name: A &#8594; Z</option>
+                                    <option class="fw-bold" value="name-desc">Name: Z &#8594; A</option>
 
-                                    <option value="price-asc">Price: Ascending</option>
-                                    <option value="price-desc">Price: Descending</option>
+                                    <option class="fw-bold" value="price-asc">Price: Ascending</option>
+                                    <option class="fw-bold" value="price-desc">Price: Descending</option>
                                 </select>
                             </label>
                         </div>
@@ -95,7 +97,8 @@
                             <div class="col-md-4 col-xs-6" th:each="product : ${productList}">
 
                                 <div class="product">
-                                    <a th:href="@{~/products/{id}(id = ${product.id})}">
+                                    <a hx-disable="true"
+                                       th:href="@{~/products/{id}(id = ${product.id})}">
                                         <div class="product-img">
                                             <img alt="" th:src="@{${product.imageUrl.get(0)}}">
                                             <div class="product-label" th:if="${product.trend != null}">
@@ -115,22 +118,17 @@
                                         </button>
                                     </div>
                                 </div>
-
-
                             </div>
 
                             <span class="store-qty mt-3 mx-2">Showing [[${showingProductCount}]] products</span>
                         </div>
                         <!-- /product -->
 
-
                     </div>
-
                     <!-- /store products -->
 
                 </div>
                 <!-- /STORE -->
-
             </form>
             <!-- /row -->
         </div>

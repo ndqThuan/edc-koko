@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,6 +85,31 @@ public class ProductService {
 
         String requestCategory = categoryName.replace("-", " ");
         List<Product> products = productRepository.findByCategoryName(requestCategory);
+
+        return products.stream()
+                       .map(product -> mapToDTO(product, new ProductDTO()))
+                       .toList();
+    }
+
+    public List<ProductDTO> findByCategoryNameAndProductName (String categoryName, String productName) {
+        List<Product> products = new ArrayList<>();
+        String requestCategory = categoryName.replace("-", " ");
+
+        if (categoryName.equalsIgnoreCase("all") && productName == null) {
+            products = productRepository.findAll();
+        }
+
+        if (categoryName.equalsIgnoreCase("all") && productName != null) {
+            products = productRepository.findByName(productName);
+        }
+
+        if (!categoryName.equalsIgnoreCase("all") && productName == null) {
+            products = productRepository.findByCategoryName(requestCategory);
+        }
+
+        if (!categoryName.equalsIgnoreCase("all") && productName != null) {
+            products = productRepository.findByCategory_NameAndProduct_Name(requestCategory, productName);
+        }
 
         return products.stream()
                        .map(product -> mapToDTO(product, new ProductDTO()))

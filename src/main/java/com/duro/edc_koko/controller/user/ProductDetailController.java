@@ -19,14 +19,15 @@ public class ProductDetailController {
 
     @GetMapping("/{id}")
     public ModelAndView productDetail (@PathVariable(value = "id") Integer id) {
-        ModelAndView modelAndView = new ModelAndView("user/product-detail");
+        ModelAndView mav = new ModelAndView("user/product-detail");
 
         ProductDTO thisProduct = productService.get(id);
-        modelAndView.addObject("thisProduct", thisProduct);
+        mav.addObject("thisProduct", thisProduct);
+        mav.addObject("productDetailName", thisProduct.getName());
 
         List<ProductDTO> productDTOs = productService.findByCategoryName(thisProduct.getCategory());
-        modelAndView.addObject("productList", productDTOs);
+        mav.addObject("productList", productDTOs);
 
-        return modelAndView;
+        return mav;
     }
 }

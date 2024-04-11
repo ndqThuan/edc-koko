@@ -46,4 +46,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
 
     @Query("select count(distinct p) from Product p where p.category.id = ?1")
     int countDistinctByCategory (int id);
+
+
+    @Query("select p from Product p where upper(p.name) like upper(concat('%', ?1, '%'))")
+    List<Product> findByName (String name);
+
+    @Query("""
+            select p from Product p
+            where  upper(p.category.name) like upper(concat('%', ?1, '%')) and upper(p.name) like upper(concat('%', ?2, '%'))""")
+    List<Product> findByCategory_NameAndProduct_Name (String categoryName, String productName);
 }

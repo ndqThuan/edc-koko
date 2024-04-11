@@ -36,8 +36,9 @@ public class SecurityConfiguration {
             "/fonts/**",
 
             "/api/v1/auth/**",
-            "api/v1/blob/**",
-            "api/products/**"};
+            "/api/v1/blob/**",
+            "/api/products/**",
+            "/api/jedis/**"};
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;

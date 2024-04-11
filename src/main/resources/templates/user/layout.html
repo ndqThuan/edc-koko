@@ -67,9 +67,9 @@
                 <!-- SEARCH BAR -->
                 <div class="col-md-6">
                     <div class="header-search">
-                        <form class="d-flex" >
-                            <select class="p-2 flex-grow-1 input-select rounded-start-5" name="category">
-                                <option>All Categories</option>
+                        <form class="d-flex" th:action="@{~/categories/fullpage}">
+                            <select class="p-2 flex-grow-1 input-select rounded-start-5" name="categories">
+                                <option value="all">All Categories</option>
                                 <option value="keychain">Keychain</option>
                                 <option value="multitool">Multitool</option>
                                 <option value="spoon-and-fork">Spoon And Fork</option>
@@ -78,8 +78,8 @@
                                 <option value="camping-tools">Camping Tools</option>
                             </select>
 
-                            <input class="input rounded-0 p-2" placeholder="Search here">
-                            <button class="btn-danger rounded-end-5 bg-danger text-light fw-bold p-2 border-2 border-white">Search</button>
+                            <input class="input rounded-0 p-2" placeholder="Search here" name="similarName">
+                            <button type="submit" class="btn-danger rounded-end-5 bg-danger text-light fw-bold p-2 border-2 border-white">Search</button>
                         </form>
                     </div>
                 </div>

@@ -33,10 +33,31 @@ public class ProductCategoryController {
         mav.addObject("productList", productDTOList);
 
         getShowingProductCounts(mav, productDTOList.size());
-        getCategoryList(mav);
+
+        ProductFilter filter = new ProductFilter();
+        filter.getCategories().add(categoryName);
+
+        getCategoryListWithFilter(mav, filter);
 
         return mav;
     }
+
+    @GetMapping("/fullpage")
+    public ModelAndView inputSearch (@ModelAttribute(value = "productFilters") ProductFilter filters) {
+        ModelAndView mav = new ModelAndView("user/product-categories");
+
+        String categoryName = filters.getCategories().get(0);
+        String productName = filters.getSimilarName();
+
+        List<ProductDTO> productDTOList = productService.findByCategoryNameAndProductName(categoryName, productName);
+
+        mav.addObject("productList", productDTOList);
+        getShowingProductCounts(mav, productDTOList.size());
+        getCategoryListWithFilter(mav, filters);
+
+        return mav;
+    }
+
 
     @GetMapping("/filter")
     public ModelAndView categoryFilter (@ModelAttribute(value = "productFilters") ProductFilter filters) {
@@ -50,6 +71,11 @@ public class ProductCategoryController {
         return mav;
     }
 
+
+    public void getCategoryListWithFilter (ModelAndView mav, ProductFilter filter) {
+        getCategoryList(mav);
+        mav.addObject("productFilters", filter);
+    }
 
     /* View-relative methods */
     public void getCategoryList (ModelAndView mav) {
