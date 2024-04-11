@@ -1,9 +1,11 @@
 package com.duro.edc_koko.entity.product.service;
 
+import com.duro.edc_koko.entity.category.repos.CategoryRepository;
 import com.duro.edc_koko.entity.image.service.ImageService;
 import com.duro.edc_koko.entity.order.repos.OrderDetailRepository;
 import com.duro.edc_koko.entity.product.domain.Product;
 import com.duro.edc_koko.entity.product.model.ProductDTO;
+import com.duro.edc_koko.entity.product.model.ProductFilter;
 import com.duro.edc_koko.entity.product.model.ProductTrend;
 import com.duro.edc_koko.entity.product.repos.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,12 +31,11 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ImageService imageService;
-
+    private final CategoryRepository categoryRepository;
     @Value("${azure.image-not-found-url}")
     // Create a custom property that take the value of the image not found url
     // Or you can just put a string in this variable
     private String IMAGE_NOT_FOUND_URL;
-
 
     public List<ProductDTO> findAll () {
         final List<Product> products = productRepository.findAll(Sort.by("id"));
@@ -67,13 +69,52 @@ public class ProductService {
         return viewProduct;
     }
 
-    public List<ProductDTO> getProductsFromCategory (String category) {
-        List<Product> products = productRepository.findByCategory_Name(category);
+    public int countAllProduct () {
+        return productRepository.countAllProducts();
+    }
+
+    public int countByCategory (int categoryId) {
+        return productRepository.countDistinctByCategory(categoryId);
+    }
+
+    public List<ProductDTO> findByCategoryName (String categoryName) {
+        if (categoryName.equalsIgnoreCase("all")) {
+            return findAll();
+        }
+
+        String requestCategory = categoryName.replace("-", " ");
+        List<Product> products = productRepository.findByCategoryName(requestCategory);
+
         return products.stream()
                        .map(product -> mapToDTO(product, new ProductDTO()))
                        .toList();
     }
 
+    public List<ProductDTO> findFilteredProducts (ProductFilter filter) {
+        Specification<Product> spec = Specification.where(null);
+
+        if (filter.hasCategories()) {
+            spec = spec.and(ProductRepository.withCategory(filter.getCategories()));
+        }
+
+        if (filter.hasMinPrice()) {
+            spec = spec.and(ProductRepository.withPriceGreaterThan(filter.getMin_price()));
+        }
+
+        if (filter.hasMaxPrice()) {
+            spec = spec.and(ProductRepository.withPriceLessThan(filter.getMax_price()));
+        }
+
+        if (filter.hasOrderBy()) {
+            spec = spec.and(ProductRepository.orderBy(filter.getOrderBy()));
+        }
+
+        List<Product> products = productRepository.findAll(spec);
+
+        return products.stream()
+                       .map(product -> mapToDTO(product, new ProductDTO()))
+                       .toList();
+    }
 
     public Integer create (final Product product) {
         product.setUploadDate(LocalDate.now());

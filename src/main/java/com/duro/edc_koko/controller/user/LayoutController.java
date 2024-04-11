@@ -1,7 +1,7 @@
 package com.duro.edc_koko.controller.user;
 
-import com.duro.edc_koko.entity.category.model.CategoryDTO;
 import com.duro.edc_koko.entity.category.service.CategoryService;
+import com.duro.edc_koko.entity.product.model.ProductDTO;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/layout")
@@ -20,23 +21,12 @@ public class LayoutController {
 
     @HxRequest
     @GetMapping("/navbar-categories")
-    public ModelAndView getCategoriesForNavbar () {
-        ModelAndView mav = new ModelAndView("user/layout :: navbarCategories");
+    public ModelAndView getShoppingCart () {
+        ModelAndView mav = new ModelAndView("user/layout :: shoppingCart");
 
-        List<CategoryDTO> categoryDTOList = categoryService.find5Categories();
-        mav.addObject("navbarCategories", categoryDTOList);
-
-        return mav;
-    }
-
-    @HxRequest
-    @GetMapping("/searchbar-categories")
-    public ModelAndView getCategoriesForSearchbar () {
-        ModelAndView mav = new ModelAndView("user/layout :: searchbarCategories");
-
-        List<CategoryDTO> categoryDTOList = categoryService.findAll();
-        mav.addObject("searchbarCategories", categoryDTOList);
+        Map<ProductDTO, Integer> cartMap = new HashMap<>();
 
         return mav;
     }
+
 }

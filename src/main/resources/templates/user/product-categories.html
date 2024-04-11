@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html layout:decorate="~{user/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-
 <head>
     <title>STORE</title>
 </head>
@@ -14,7 +13,12 @@
         <!-- container -->
         <div class="container">
             <!-- row -->
-            <form class="row">
+            <form class="row"
+                  hx-get="./filter"
+                  hx-push-url="./all"
+                  hx-swap="innerHTML"
+                  hx-target="#product-row"
+                  th:object="${productFilters}">
                 <!-- ASIDE -->
                 <div class="col-md-3" id="aside">
                     <!-- aside Widget -->
@@ -22,21 +26,16 @@
                         <h3 class="aside-title">Categories</h3>
                         <div class="checkbox-filter">
 
-                            <div class="input-checkbox">
-                                <input id="category-1" type="checkbox">
-                                <label for="category-1">
+                            <div class="input-checkbox"
+                                 th:each="entry : ${categoryList}">
+                                <input name="categories"
+                                       th:id="'category-' + ${entry.key}"
+                                       th:value="${entry.key.replace(' ', '-').toLowerCase()}"
+                                       type="checkbox">
+                                <label th:for="'category-' + ${entry.key}">
                                     <span></span>
-                                    Laptops
-                                    <small>(120)</small>
-                                </label>
-                            </div>
-
-                            <div class="input-checkbox">
-                                <input id="category-2" type="checkbox">
-                                <label for="category-2">
-                                    <span></span>
-                                    Laptops
-                                    <small>(120)</small>
+                                    [[${entry.key}]]
+                                    <small>([[${entry.value}]])</small>
                                 </label>
                             </div>
 
@@ -50,19 +49,21 @@
                         <div class="price-filter">
                             <div id="price-slider"></div>
                             <div class="input-number price-min">
-                                <input id="price-min" type="number">
+                                <input id="price-min" name="min_price" type="number">
                                 <span class="qty-up">+</span>
                                 <span class="qty-down">-</span>
                             </div>
                             <span>-</span>
                             <div class="input-number price-max">
-                                <input id="price-max" type="number">
+                                <input id="price-max" name="max_price" type="number">
                                 <span class="qty-up">+</span>
                                 <span class="qty-down">-</span>
                             </div>
                         </div>
                     </div>
                     <!-- /aside Widget -->
+
+                    <button class="btn btn-success mt-5 fs-4" type="submit">Filter</button>
                 </div>
                 <!-- /ASIDE -->
 
@@ -73,10 +74,14 @@
                     <div class="store-filter clearfix">
                         <div class="store-sort">
                             <label>
-                                Sort By:
-                                <select class="input-select">
-                                    <option value="name">Name</option>
-                                    <option value="price">Price</option>
+                                Order By:
+                                <select class="input-select" name="orderBy">
+                                    <option disabled selected value="">Please select</option>
+                                    <option value="name-asc">Name: Ascending</option>
+                                    <option value="name-desc">Name: Descending</option>
+
+                                    <option value="price-asc">Price: Ascending</option>
+                                    <option value="price-desc">Price: Descending</option>
                                 </select>
                             </label>
                         </div>
@@ -87,7 +92,6 @@
                     <div id="product-row">
                         <!-- product -->
                         <div class="row" th:fragment="productRowFragment">
-
                             <div class="col-md-4 col-xs-6" th:each="product : ${productList}">
 
                                 <div class="product">
@@ -115,19 +119,18 @@
 
                             </div>
 
+                            <span class="store-qty mt-3 mx-2">Showing [[${showingProductCount}]] products</span>
                         </div>
                         <!-- /product -->
+
+
                     </div>
 
                     <!-- /store products -->
 
-                    <!-- store bottom filter -->
-                    <div class="store-filter clearfix">
-                        <span class="store-qty">Showing 20-100 products</span>
-                    </div>
-                    <!-- /store bottom filter -->
                 </div>
                 <!-- /STORE -->
+
             </form>
             <!-- /row -->
         </div>

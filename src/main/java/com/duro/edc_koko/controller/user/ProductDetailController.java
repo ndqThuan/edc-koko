@@ -24,7 +24,7 @@ public class ProductDetailController {
         ProductDTO thisProduct = productService.get(id);
         modelAndView.addObject("thisProduct", thisProduct);
 
-        List<ProductDTO> productDTOs = productService.getProductsFromCategory(thisProduct.getCategory());
+        List<ProductDTO> productDTOs = productService.findByCategoryName(thisProduct.getCategory());
         modelAndView.addObject("productList", productDTOs);
 
         return modelAndView;

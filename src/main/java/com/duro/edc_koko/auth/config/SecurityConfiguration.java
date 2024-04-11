@@ -1,6 +1,5 @@
-package com.duro.edc_koko.config;
+package com.duro.edc_koko.auth.config;
 
-import com.duro.edc_koko.auth.config.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

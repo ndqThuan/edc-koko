@@ -9,7 +9,7 @@ import redis.clients.jedis.JedisPooled;
 public class JedisService {
     private final JedisPooled jedis;
 
-    public void set(String key, String value) {
+    public void set (String key, String value) {
         jedis.set(key, value);
     }
 

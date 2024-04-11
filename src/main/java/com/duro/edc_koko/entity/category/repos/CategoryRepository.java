@@ -14,4 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query("select c from Category c order by c.id limit 5")
     List<Category> find5Categories ();
 
+    @Query("select c.id from Category c where upper(c.name) like upper(?1)")
+    Integer findIdByName (String name);
+
 }
